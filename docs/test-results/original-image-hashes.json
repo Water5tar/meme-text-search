@@ -1,0 +1,38 @@
+[
+  {
+    "file": "06_corrupt.jpg",
+    "before_sha256": "30563ba98ddb52ec8fb07aa30903ffb2e7340f1914a77445efba4f24cf0d3103",
+    "after_sha256": "30563ba98ddb52ec8fb07aa30903ffb2e7340f1914a77445efba4f24cf0d3103",
+    "unchanged": true
+  },
+  {
+    "file": "05_blank.png",
+    "before_sha256": "84d3679feeb3ea1b8b8b9f72e635d61eb003c288f9b2fcc12df431418a545653",
+    "after_sha256": "84d3679feeb3ea1b8b8b9f72e635d61eb003c288f9b2fcc12df431418a545653",
+    "unchanged": true
+  },
+  {
+    "file": "04_english.png",
+    "before_sha256": "248c2636b9a551485b56408aa66204e5822460457d297b906ba0d38e1c22a252",
+    "after_sha256": "248c2636b9a551485b56408aa66204e5822460457d297b906ba0d38e1c22a252",
+    "unchanged": true
+  },
+  {
+    "file": "03_work.png",
+    "before_sha256": "25264f7cc316d51b3cab02fdace876f03c55a3bb635c7b64d0304e8dc382ad23",
+    "after_sha256": "25264f7cc316d51b3cab02fdace876f03c55a3bb635c7b64d0304e8dc382ad23",
+    "unchanged": true
+  },
+  {
+    "file": "02_sleep.png",
+    "before_sha256": "9f7bf6e48609abec9659a8856320c073f65091135fe5a358ff9b2abd6c62673c",
+    "after_sha256": "9f7bf6e48609abec9659a8856320c073f65091135fe5a358ff9b2abd6c62673c",
+    "unchanged": true
+  },
+  {
+    "file": "01_happy.png",
+    "before_sha256": "6c033f3d37b7eb632d294df7150da8ffb01bbfd43d022a1bec3275006de44260",
+    "after_sha256": "6c033f3d37b7eb632d294df7150da8ffb01bbfd43d022a1bec3275006de44260",
+    "unchanged": true
+  }
+]

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.MemeOcr" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:colorPrimary">#126A64</item>
+        <item name="android:colorPrimaryDark">#124F4A</item>
+        <item name="android:colorAccent">#126A64</item>
+        <item name="android:windowBackground">#FAFAFA</item>
+        <item name="android:statusBarColor">#124F4A</item>
+    </style>
+</resources>

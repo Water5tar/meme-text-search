@@ -1,0 +1,14 @@
+.gradle/
+.kotlin/
+.agents/
+.codex/
+.codeinsight/
+**/build/
+local.properties
+.toolchain/
+.signing/
+*.jks
+*.keystore
+.idea/
+*.iml
+AGENTS.md
