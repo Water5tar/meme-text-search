@@ -95,3 +95,7 @@ Run the device tests on an emulator or a dedicated test device. They use synthet
 - docs/verification.md: commands, results, known OCR error, screenshots and remaining device checks.
 
 The app uses [ML Kit's bundled Chinese recognizer](https://developers.google.com/ml-kit/vision/text-recognition/v2/android), [Android MediaStore](https://developer.android.com/training/data-storage/shared/media) and [RE2/J](https://github.com/google/re2j).
+
+## License
+
+This project's code is available under the [MIT License](LICENSE). Third-party dependencies and the memes shown in screenshots retain their respective licenses and copyrights.

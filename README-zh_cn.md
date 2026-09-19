@@ -96,3 +96,7 @@
 - docs/verification.md：实际结果、截图、识别误差和真机待验项目。
 
 实现资料：[ML Kit 中文识别](https://developers.google.com/ml-kit/vision/text-recognition/v2/android)、[Android MediaStore](https://developer.android.com/training/data-storage/shared/media)、[RE2/J](https://github.com/google/re2j)。
+
+## 许可证
+
+本项目代码采用 [MIT 许可证](LICENSE)。第三方依赖和截图中的表情包仍受各自的许可证及版权约束。
