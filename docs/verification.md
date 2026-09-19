@@ -4,7 +4,7 @@
 
 ## 交付物
 
-- [签名发布 APK](../artifacts/MemeOCR-1.0.0.apk)：46,390,803 字节，约 44.2 MiB。
+- [签名发布 APK](https://github.com/rb-tyz/wheres-my-meme/releases/download/v1.0.0/MemeOCR-1.0.0.apk)：46,390,803 字节，约 44.2 MiB。
 - 包名 com.memeocr.app；versionCode 1；versionName 1.0.0。
 - minSdk 26，targetSdk/compileSdk 35。
 - 包含 arm64-v8a、armeabi-v7a、x86、x86_64 库。

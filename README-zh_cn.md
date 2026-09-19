@@ -1,8 +1,8 @@
-# Meme OCR：按文字查找表情包
+# Where's My Meme
 
 一款纯本地、轻量、无需部署的 Android meme搜索工具。读取本地相册，识别图片中的文字并保存结果，之后输入文字就能查找对应的 meme。
 
-[安装包](artifacts/MemeOCR-1.0.0.apk) · [测试记录](docs/verification.md) · [English](README.md)
+[安装包](https://github.com/rb-tyz/wheres-my-meme/releases/download/v1.0.0/MemeOCR-1.0.0.apk) · [测试记录](docs/verification.md) · [English](README.md)
 
 - **纯本地**：OCR 模型随安装包提供，识别、缓存和搜索都在手机上完成，无需联网，不上传图片。
 - **轻量**：使用 Kotlin 和 Android 原生界面，按批次处理图片，复用已保存的识别结果，并限制图片解码和缩略图缓存的内存占用。
@@ -23,7 +23,7 @@
 
 ## 安装与使用
 
-1. 将 [MemeOCR-1.0.0.apk](artifacts/MemeOCR-1.0.0.apk) 传到手机，使用系统安装器打开。如果系统询问，允许用于打开文件的应用安装此 APK。
+1. 将 [MemeOCR-1.0.0.apk](https://github.com/rb-tyz/wheres-my-meme/releases/download/v1.0.0/MemeOCR-1.0.0.apk) 传到手机，使用系统安装器打开。如果系统询问，允许用于打开文件的应用安装此 APK。
 2. 打开 **Meme 文字搜索**，授予照片读取权限。应用只显示获准访问的图片。通知权限用于在通知栏展示识别进度。
 3. 选择本地相册。第一次建议先处理 100 张，看看自己图库里的识别效果。默认每批 1000 张，可输入 1–10000。
 4. 点击 **开始识别本批**。每张识别完成后先保存，再更新进度。点击 **停止本批** 后，会处理并保存当前图片，然后停止。

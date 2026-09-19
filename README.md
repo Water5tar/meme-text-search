@@ -1,8 +1,8 @@
-# Meme OCR: Find memes by their text
+# Where's My Meme
 
 A lightweight, fully local Android app for finding saved memes, with no server to deploy. It reads a local album, recognizes and saves the text in each image, and lets you search for memes by that text.
 
-[简体中文](README-zh_cn.md) · [Download APK](artifacts/MemeOCR-1.0.0.apk) · [Verification record](docs/verification.md)
+[简体中文](README-zh_cn.md) · [Download APK](https://github.com/rb-tyz/wheres-my-meme/releases/download/v1.0.0/MemeOCR-1.0.0.apk) · [Verification record](docs/verification.md)
 
 - **Fully local**: The OCR model is bundled with the APK. Recognition, caching and search all run on your phone, without an Internet connection or image uploads.
 - **Lightweight**: Built with Kotlin and native Android UI, the app processes images in batches, reuses saved recognition results, and limits memory use for image decoding and thumbnail caching.
@@ -24,7 +24,7 @@ The app has been tested on an Android 11 AOSP emulator without Google Play servi
 
 ## Install and use
 
-1. Copy [MemeOCR-1.0.0.apk](artifacts/MemeOCR-1.0.0.apk) to the phone and open it with the system package installer. Allow installation from the file-opening app if the system asks.
+1. Copy [MemeOCR-1.0.0.apk](https://github.com/rb-tyz/wheres-my-meme/releases/download/v1.0.0/MemeOCR-1.0.0.apk) to the phone and open it with the system package installer. Allow installation from the file-opening app if the system asks.
 2. Open **Meme 文字搜索** and grant photo access. The app only lists photos it is permitted to read. Notification permission allows progress to appear in the notification area.
 3. Select a local album. Start with a small batch such as 100 images to evaluate your own pictures. The default batch size is 1,000; accepted values are 1–10,000.
 4. Tap **开始识别本批**. Each result is saved before progress advances. **停止本批** lets the current image finish and saves it.

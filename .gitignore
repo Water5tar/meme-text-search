@@ -12,3 +12,7 @@ local.properties
 .idea/
 *.iml
 AGENTS.md
+
+# Publish installation packages as GitHub Release assets.
+*.apk
+*.apk.idsig
