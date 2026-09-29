@@ -1,9 +1,0 @@
-package: com.memeocr.app
-uses-permission: name='android.permission.READ_MEDIA_IMAGES'
-uses-permission: name='android.permission.READ_EXTERNAL_STORAGE' maxSdkVersion='32'
-uses-permission: name='android.permission.FOREGROUND_SERVICE'
-uses-permission: name='android.permission.FOREGROUND_SERVICE_DATA_SYNC'
-uses-permission: name='android.permission.POST_NOTIFICATIONS'
-uses-permission: name='android.permission.READ_MEDIA_VISUAL_USER_SELECTED'
-permission: com.memeocr.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
-uses-permission: name='com.memeocr.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION'
