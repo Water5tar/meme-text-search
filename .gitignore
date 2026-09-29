@@ -1,10 +1,14 @@
 .gradle/
+.gradle-cache/
+hs_err_pid*.log
+*.hprof
 .kotlin/
 .agents/
 .codex/
 .codeinsight/
 **/build/
 local.properties
+signing.properties
 .toolchain/
 .signing/
 *.jks
@@ -12,6 +16,13 @@ local.properties
 .idea/
 *.iml
 AGENTS.md
+/artifacts/
+*.p12
+*.pfx
+*.pem
+*.key
+.env
+.env.*
 
 # Publish installation packages as GitHub Release assets.
 *.apk

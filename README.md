@@ -1,101 +1,116 @@
-# Where's My Meme
+# Meme 文字搜索 · MemeSearch
 
-A lightweight, fully local Android app for finding saved memes, with no server to deploy. It reads a local album, recognizes and saves the text in each image, and lets you search for memes by that text.
+基于 [rb-tyz/wheres-my-meme](https://github.com/rb-tyz/wheres-my-meme) 的 MIT 开源改进版。感谢原作者提供基础实现；保留原版权声明与许可证。
 
-[简体中文](README-zh_cn.md) · [Download APK](https://github.com/rb-tyz/wheres-my-meme/releases/download/v1.0.0/MemeOCR-1.0.0.apk) · [Verification record](docs/verification.md)
+这是一个分享给朋友使用的小工具，目前作为 MVP / 预览版提供。自动化发布验证使用 Android 14 模拟器；用户已在 Redmi Note 14 Pro+ 上试用并反馈未发现问题。其他机型与系统版本仍待验证。
 
-- **Fully local**: The OCR model is bundled with the APK. Recognition, caching and search all run on your phone, without an Internet connection or image uploads.
-- **Lightweight**: Built with Kotlin and native Android UI, the app processes images in batches, reuses saved recognition results, and limits memory use for image decoding and thumbnail caching.
-- **No deployment needed**: Install the APK and grant photo access to get started. There is no server to set up or cloud service to configure.
+[下载 APK / Releases](https://github.com/Water5tar/meme-text-search/releases) · [测试报告](TEST-REPORT.md) · [与上游的区别](FORK.md) · [版本记录](CHANGELOG.md)
 
-## Background
+**Your photos never leave your device.**
 
-**Who doesn't love a good meme?**
+读取系统相册，在设备上识别图片里的中英文，再按文字搜索表情包。无需联网、账号、服务器或 API Key。
 
-I've collected about 9,000 memes so far. I'll be in a chat and think of the perfect one, the kind that would absolutely win the conversation, only to give up because I can't find it in my gallery.
+## 与原项目的区别
 
-Then Astra came to the rescue and helped me write this app. And by "helped," I mean did the coding while I supplied the vibes.
+- 授权后自动索引获准照片，暂停、继续和重新打开后续处理。
+- Compose 图片网格，输入后 200 ms 防抖搜索，Room 查询和分页。
+- WorkManager 持久队列，新增 / 修改 / 删除的增量同步。
+- 内置中文及拉丁文字模型，处理 Android 14 的部分照片授权。
 
-## Release and compatibility
+原版的相册选择、正则搜索和通知栏进度没有保留。基本目标仍是离线按图片里的文字查找表情包，没有语义搜索。
 
-Version 1.0.0 is a signed, non-debuggable APK, approximately 44.2 MiB. It supports Android 8.0 / API 26 and later.
+## 界面
 
-The app has been tested on an Android 11 AOSP emulator without Google Play services and with networking disabled, and on a Huawei Mate 60 Pro.
+以下是本版签名 release APK 的模拟器截图，使用合成测试图片：
 
-## Install and use
+<p>
+  <img src="docs/screenshots/search.png" alt="文字搜索结果" width="230" />
+  <img src="docs/screenshots/partial.png" alt="仅搜索获准照片" width="230" />
+  <img src="docs/screenshots/preview.png" alt="图片预览" width="230" />
+</p>
 
-1. Copy [MemeOCR-1.0.0.apk](https://github.com/rb-tyz/wheres-my-meme/releases/download/v1.0.0/MemeOCR-1.0.0.apk) to the phone and open it with the system package installer. Allow installation from the file-opening app if the system asks.
-2. Open **Meme 文字搜索** and grant photo access. The app only lists photos it is permitted to read. Notification permission allows progress to appear in the notification area.
-3. Select a local album. Start with a small batch such as 100 images to evaluate your own pictures. The default batch size is 1,000; accepted values are 1–10,000.
-4. Tap **开始识别本批**. Each result is saved before progress advances. **停止本批** lets the current image finish and saves it.
-5. Start another batch to continue. Completed, unchanged images—including images with no text—are skipped. Use **重试本相册失败项** to retry failed images in the selected album.
-6. Open **搜索图片**, enter text and tap **查找图片**. Tap a result to preview the original and open Android's share sheet.
+## 安装与使用
 
-Search spans all recognized albums that are still accessible. Images that were deleted, changed or are no longer authorized are excluded from search.
+1. 从本仓库 [Releases](https://github.com/Water5tar/meme-text-search/releases) 下载 `MemeSearch-1.1.0.apk`，复制到手机并允许文件管理器安装此 APK。最低 Android 8.0（API 26）。GitHub 页面自动提供的 Source code ZIP 是源码，不能直接安装。
+2. 打开“Meme 文字搜索”，授权读取照片。Android 14 及以后可以选择全部照片或部分照片。
+3. 授权后自动索引。首页显示已识别数量、总数量和后台任务状态；已识别的图片可以立即搜索。
+4. 在 `Search memes...` 输入图片中的文字，例如“笑死”。英文不区分大小写；全角 ASCII、中文字符间空白、换行会规范化。
+5. 点图片查看预览，点“分享”调用系统分享面板。
+6. 可以暂停、继续或重试失败图片。重新打开 App 时会同步新增、修改和删除的图片，已完成且未变化的图片不会再次 OCR。
 
-<table align="center">
-  <tr>
-    <th align="center">Text search: 猫猫 (cats)</th>
-    <th align="center">Regex search: 狗|猫 (dog or cat)</th>
-  </tr>
-  <tr>
-    <td align="center" width="50%"><a href="pics/image.png"><img src="pics/image.png" alt="Text search for 猫猫 (cats), showing matching memes" width="280"></a></td>
-    <td align="center" width="50%"><a href="pics/image-1.png"><img src="pics/image-1.png" alt="Regex search for 狗|猫, showing memes containing either word" width="280"></a></td>
-  </tr>
-</table>
+空搜索词显示获准访问的相册图片；输入文字后只匹配成功识别的 OCR 文字。搜索使用字面包含关系：`%`、`_`、标点都当作普通字符，不匹配文件名、分类或含义相近的词。OCR 本身可能误识别、漏字；这会影响搜索命中。
 
-## Search modes
+Android 14 的“管理照片授权”可重新选择照片。拒绝或撤销权限后显示授权界面；系统不再允许读取的图片不会继续展示。部分授权时，不可访问的索引会隐藏并保留，重新授权后可复用。全部授权的同步确认图片删除后才删除对应索引。临时移除 SD 卡时保留其索引，待重新插入后同步。
 
-Ordinary search matches a substring after normalizing full-width ASCII, letter case and repeated whitespace. It cannot find text-free images by what they depict or correct OCR mistakes.
+后台任务由 WorkManager 调度，分段完成，每段最多 80 张或约 3 分钟，OCR 并发数为 1。切到后台会尽量继续；省电策略、系统调度或手动强行停止可能延后任务，下次打开可从未完成的图片继续。暂停会等待当前一张图片收尾，防止在 ML Kit 使用图片时释放 Bitmap。
 
-Regular-expression mode matches the original OCR text and is case-sensitive. Examples:
+## 隐私与存储
 
-| Expression | Meaning |
-| --- | --- |
-| 摸鱼\|放假 | Either phrase |
-| [0-9]{4} | Four consecutive digits |
-| (?s)晚安.*明天 | 晚安 followed by 明天, allowing line breaks in between |
+- 使用内置 ML Kit 中文、拉丁文字模型，首次识别也不下载模型。
+- 最终 Manifest 明确移除 `INTERNET` 和 `ACCESS_NETWORK_STATE`。没有登录、分析后台或远程搜索。
+- 原图保持原来的 MediaStore `content://` URI，只读访问；不复制到 App 私有目录，不修改原图。
+- Room 仅保存 URI、元数据、OCR 原文、规范化文本、时间和处理状态。缩略图仅做内存缓存。
+- 分享时将原图 URI 和临时读取权限交给用户选择的目标 App。目标 App 如何处理分享内容由该 App 决定。
+- 禁止系统备份和设备迁移。卸载本 App 会清除其索引，不会删除系统相册图片。
 
-Regular expressions use RE2/J to avoid catastrophic backtracking. Lookaround and backreferences are unsupported and produce an error message.
+## 实现
 
-## Storage, privacy and limitations
+Kotlin / Jetpack Compose / MediaStore / bundled ML Kit / Room / Coroutines / WorkManager / Coil / Paging。
 
-- Original images are opened read-only. The app does not rename, move, rewrite or upload them.
-- The release APK does not request INTERNET, WRITE_EXTERNAL_STORAGE or MANAGE_EXTERNAL_STORAGE. OCR does not require a first-run model download.
-- OCR results, errors and metadata stay in the app's private SQLite database. Automatic app-data backups are disabled. Uninstalling the app or clearing its data removes the recognition cache.
-- Cache identity uses media URI, file size and modification time. A changed version is processed again. Moved/copied images can be processed again; content-hash deduplication is not included.
-- Animated images are recognized from their first frame. Preview is static; sharing sends the original file.
-- OCR can struggle with blurry text, small print and stylized lettering. In one test image, “今天也要开心” was read as “今天也妻开心”, so an exact search for a long sentence may miss a match. Try a shorter phrase, though words the OCR missed still won't be searchable.
-- A foreground service reports progress, but the OS may stop it. Saved results survive process termination; reopen the app and start the next batch. Automatic restart after force-stop/reboot is not provided.
-- Initial recognition time and accuracy for 9,000 real memes have not been measured. The 9,000-record automated checks cover scheduling and search, not an OCR throughput benchmark.
+Room `photos` 以内容 URI 为主键，`volumeName + mediaStoreId` 唯一，避免多存储卷 ID 冲突。`indexed` 包括“成功识别但没有文字”的图片；`pending` 等待处理；`failed` 等待用户重试或图片版本变化。每张图片的结果立即写入数据库。
 
-## Build
+Android 11+ 使用 MediaStore generation 查询新增或变化的元数据；Android 8–10 使用带重叠窗口的新增/修改时间查询。每次同步还做一遍 ID 查询，以检测删除和较老图片的新授权，不重新解码全部图片。首次或 MediaStore 数据库重建、授权范围变化时重新读取元数据。相册在扫描中发生变化时，不提交删除检查点，稍后重试。
 
-Use JDK 17, Android SDK platform 35, build-tools 34.0.0, and an Internet connection for the first dependency download. Gradle 8.9 and its checksum are pinned in the wrapper; AGP 8.7.3 and Kotlin 2.0.21 are pinned in the project.
+OCR 解码最长边不超过 2,560 像素，处理 EXIF 方向，一张一张释放 Bitmap；极长图片按最长边缩放，文字太小可能降低识别率。缩略图请求 360 像素，预览请求 2,048 像素。搜索防抖 200 毫秒，数据库查询在后台执行；分页每页 60 条，界面使用 3 列（宽屏 4 列）LazyVerticalGrid。
 
-    export JAVA_HOME=/path/to/jdk17
-    export ANDROID_HOME=/path/to/android-sdk
-    ./scripts/build-apk.sh
+没有语义搜索、LLM、embedding、云 OCR、相册修改或复杂实时监听。当前库查询采用 SQLite `instr` 字面 substring；未引入 FTS。
 
-The script runs unit tests and release lint, builds and signs the APK, verifies its signature and permissions, and writes a SHA-256 checksum to artifacts/SHA256SUMS. The first run creates a private signing key in .signing/. Preserve that directory securely for future updates; it is excluded from version control and must not be distributed with the APK. Losing the key prevents in-place updates signed with the same identity.
+## 编译与测试
 
-An existing Gradle executable can be supplied through GRADLE_BIN. GRADLE_USER_HOME can point to an isolated cache. No global Java or system configuration changes are required.
+需要 JDK 17、Android SDK 35；仓库内包含 Gradle 8.9 wrapper。构建依赖的首次下载需要联网，安装后的 App 不需要联网。
 
-## Tests and code
+Windows PowerShell 示例（环境路径替换成你的安装位置）：
 
-    ./gradlew :core:test :app:lintDebug :app:assembleDebug
-    ./gradlew :app:connectedDebugAndroidTest
+```powershell
+$env:JAVA_HOME = 'D:\Tools\jdk-17'
+$env:ANDROID_HOME = 'D:\Tools\android-sdk'
+Set-Content local.properties "sdk.dir=$($env:ANDROID_HOME.Replace('\','/'))"
+.\gradlew.bat :core:test :app:assembleDebug :app:lintDebug
+.\gradlew.bat :app:connectedDebugAndroidTest
+```
 
-Run the device tests on an emulator or a dedicated test device. They use synthetic images and temporary database records. The Chinese OCR integration check verifies that the offline model runs and recognizes specific words; it does not require a perfect transcription. Known errors are documented in the verification record.
+Android 设备测试使用 API 34、照片授权。真实合成图片压力测试默认为 1,000 张，也可单独指定规模：
 
-- core/: platform-independent batch selection, processing loop, status, normalization and search.
-- app/: native Android UI, read-only MediaStore access, bounded decoding, SQLite and foreground OCR service.
-- app/src/androidTest/: actual decoder, SQLite and bundled OCR tests.
-- scripts/build-apk.sh: repeatable release and signing workflow.
-- docs/verification.md: commands, results, known OCR error, screenshots and remaining device checks.
+```powershell
+.\gradlew.bat :app:connectedDebugAndroidTest '-Pandroid.testInstrumentationRunnerArguments.class=com.memeocr.app.ThousandPhotoTest' '-Pandroid.testInstrumentationRunnerArguments.photoScale=5000'
+.\gradlew.bat :app:connectedDebugAndroidTest '-Pandroid.testInstrumentationRunnerArguments.class=com.memeocr.app.ThousandPhotoTest' '-Pandroid.testInstrumentationRunnerArguments.photoScale=10000'
+```
 
-The app uses [ML Kit's bundled Chinese recognizer](https://developers.google.com/ml-kit/vision/text-recognition/v2/android), [Android MediaStore](https://developer.android.com/training/data-storage/shared/media) and [RE2/J](https://github.com/google/re2j).
+设备测试会在相册创建测试图片，测试结束会删除自己创建的图片。请使用测试设备或模拟器。
 
-## License
+发布构建可在项目根目录放置未跟踪的 `signing.properties`：
 
-This project's code is available under the [MIT License](LICENSE). Third-party dependencies and the memes shown in screenshots retain their respective licenses and copyrights.
+```properties
+storeFile=D:/private/meme-local.jks
+storePassword=你的密码
+keyAlias=meme-local
+keyPassword=你的密码
+```
+
+随后执行 `.\gradlew.bat :app:assembleRelease :app:lintRelease`。没有签名配置时生成未签名 release APK。不要将私钥或密码提交到 Git。
+
+预编译 APK 使用本地发布签名。维护者需私下保存原签名密钥，用同一密钥签名才能覆盖安装更新。仓库不包含私钥、密码或本机配置；普通用户直接安装 Release APK，无需自行配置签名。
+
+Linux / macOS 在设置 JDK 和 SDK 后可运行 `bash scripts/build-apk.sh`；发布构建需要事先准备私下保存的 `signing.properties`，脚本不会创建或替换发布密钥。Windows 可使用 `scripts/build-local.ps1 -Release`。
+
+## 来源与验证
+
+基于 MIT 项目 [rb-tyz/wheres-my-meme](https://github.com/rb-tyz/wheres-my-meme)，固定提交 `168a6630d65f4a5a0d9fc03a7bab7d4aef85b6b5`；保留 MIT License，改动说明见 FORK.md。新包名 `com.memeocr.local`，可与上游版本共存，索引不从上游版本迁移。
+
+本次结果和验证边界见 TEST-REPORT.md。模拟器结果不代表真实手机或不同照片内容的耗时。Android 8–13 与 Android 15+ 的真机、不同厂商的后台省电策略仍需在目标手机验证。
+
+## 反馈与参与
+
+欢迎朋友们试用。遇到问题请在 [Issues](https://github.com/Water5tar/meme-text-search/issues) 说明 Android 版本、照片授权方式和复现步骤；也可以提交修复。详情见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+
+上游历史资料归档在 `docs/upstream/`，其中的旧截图、性能数字和真机记录不代表本版验证结果。
