@@ -47,12 +47,25 @@ class TextNormalizerTest {
 
     @Test
     fun `mixed content`() {
-        assertEquals("ok! 好 的", TextNormalizer.normalize("ＯＫ！ 好　的"))
+        assertEquals("ok! 好的", TextNormalizer.normalize("ＯＫ！ 好　的"))
     }
 
     @Test
     fun `emoji preserved as-is`() {
         assertEquals("😂😂", TextNormalizer.normalize("😂😂"))
+    }
+
+    @Test fun `Chinese line wraps and unicode spaces normalize`() {
+        assertEquals("我真的会谢", TextNormalizer.normalize(" 我真的\n会\u00a0谢 "))
+        assertEquals("hello world", TextNormalizer.normalize("HELLO\nWORLD"))
+    }
+
+    @Test fun `case folding is independent of device locale`() {
+        val old = java.util.Locale.getDefault()
+        try {
+            java.util.Locale.setDefault(java.util.Locale.forLanguageTag("tr-TR"))
+            assertEquals("image", TextNormalizer.normalize("IMAGE"))
+        } finally { java.util.Locale.setDefault(old) }
     }
 
     @Test
