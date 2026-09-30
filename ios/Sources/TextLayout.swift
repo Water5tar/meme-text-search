@@ -9,6 +9,19 @@ struct OCRGlyph {
 }
 
 enum TextLayout {
+    static func verticalLineOrder(_ lines: [OCRGlyph]) -> String {
+        let columns = lines.filter { line in
+            line.text.count >= 2 && line.text.unicodeScalars.allSatisfy(CharacterSet.alphanumerics.contains)
+                && line.rect.width > 0 && line.rect.height >= line.rect.width * 1.8
+        }
+        guard (2...128).contains(columns.count),
+              let lowestTop = columns.map({ 1 - $0.rect.maxY }).max(),
+              let highestBottom = columns.map({ 1 - $0.rect.minY }).min(),
+              let shortest = columns.map(\.rect.height).min(),
+              highestBottom - lowestTop >= shortest * 0.4 else { return "" }
+        return columns.sorted(by: { $0.centerX > $1.centerX }).map(\.text).joined(separator: "\n")
+    }
+
     static func normalize(_ input: String) -> String {
         let halfWidth = String(String.UnicodeScalarView(input.unicodeScalars.map { scalar in
             if (0xFF01...0xFF5E).contains(scalar.value) {
@@ -76,7 +89,8 @@ enum TextLayout {
     }
 
     static func withReadingOrder(_ raw: String, glyphs: [OCRGlyph]) -> String {
-        let ordered = readingOrder(glyphs)
+        let byLine = verticalLineOrder(glyphs)
+        let ordered = byLine.isEmpty ? readingOrder(glyphs) : byLine
         guard !ordered.isEmpty && !normalize(raw).contains(normalize(ordered)) else { return raw }
         return raw.isEmpty ? ordered : ordered + "\n" + raw
     }
