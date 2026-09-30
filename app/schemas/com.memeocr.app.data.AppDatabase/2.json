@@ -1,0 +1,180 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "fe6540fe41fdc31730c4ffa66938aad1",
+    "entities": [
+      {
+        "tableName": "photos",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`contentUri` TEXT NOT NULL, `mediaStoreId` INTEGER NOT NULL, `volumeName` TEXT NOT NULL, `dateAdded` INTEGER NOT NULL, `dateModified` INTEGER NOT NULL, `sizeBytes` INTEGER NOT NULL, `mediaGeneration` INTEGER NOT NULL, `mimeType` TEXT NOT NULL, `ocrText` TEXT NOT NULL, `normalizedText` TEXT NOT NULL, `indexedAt` INTEGER NOT NULL, `ocrStatus` TEXT NOT NULL, `error` TEXT NOT NULL, `accessible` INTEGER NOT NULL, `seenEpoch` INTEGER NOT NULL, PRIMARY KEY(`contentUri`))",
+        "fields": [
+          {
+            "fieldPath": "contentUri",
+            "columnName": "contentUri",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mediaStoreId",
+            "columnName": "mediaStoreId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "volumeName",
+            "columnName": "volumeName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dateAdded",
+            "columnName": "dateAdded",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dateModified",
+            "columnName": "dateModified",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sizeBytes",
+            "columnName": "sizeBytes",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mediaGeneration",
+            "columnName": "mediaGeneration",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mimeType",
+            "columnName": "mimeType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ocrText",
+            "columnName": "ocrText",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "normalizedText",
+            "columnName": "normalizedText",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "indexedAt",
+            "columnName": "indexedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ocrStatus",
+            "columnName": "ocrStatus",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "error",
+            "columnName": "error",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "accessible",
+            "columnName": "accessible",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "seenEpoch",
+            "columnName": "seenEpoch",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "contentUri"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_photos_volumeName_mediaStoreId",
+            "unique": true,
+            "columnNames": [
+              "volumeName",
+              "mediaStoreId"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_photos_volumeName_mediaStoreId` ON `${TABLE_NAME}` (`volumeName`, `mediaStoreId`)"
+          },
+          {
+            "name": "index_photos_accessible_ocrStatus_dateAdded",
+            "unique": false,
+            "columnNames": [
+              "accessible",
+              "ocrStatus",
+              "dateAdded"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_photos_accessible_ocrStatus_dateAdded` ON `${TABLE_NAME}` (`accessible`, `ocrStatus`, `dateAdded`)"
+          }
+        ]
+      },
+      {
+        "tableName": "media_sync",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`volumeName` TEXT NOT NULL, `storeVersion` TEXT NOT NULL, `generation` INTEGER NOT NULL, `syncedAtSeconds` INTEGER NOT NULL, `partial` INTEGER NOT NULL, PRIMARY KEY(`volumeName`))",
+        "fields": [
+          {
+            "fieldPath": "volumeName",
+            "columnName": "volumeName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "storeVersion",
+            "columnName": "storeVersion",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "generation",
+            "columnName": "generation",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "syncedAtSeconds",
+            "columnName": "syncedAtSeconds",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "partial",
+            "columnName": "partial",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "volumeName"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fe6540fe41fdc31730c4ffa66938aad1')"
+    ]
+  }
+}

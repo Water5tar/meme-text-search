@@ -8,6 +8,8 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.semantics.getOrNull
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import androidx.test.espresso.intent.Intents
@@ -16,6 +18,7 @@ import androidx.test.espresso.intent.VerificationModes.times
 import android.app.Instrumentation.ActivityResult
 import com.memeocr.app.data.OcrStatus
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.flow.first
 import org.junit.*
 import org.junit.runner.RunWith
 
@@ -28,6 +31,37 @@ class ComposeFlowTest {
         val app = compose.activity.application as MemeApplication
         uris.forEach { app.contentResolver.delete(it, null, null) }
         app.control.requestSync()
+    }
+    @Test fun previewReturnKeepsScrolledPhotoVisible() {
+        val app = compose.activity.application as MemeApplication
+        val resolver = app.contentResolver
+        val picture = androidx.test.platform.app.InstrumentationRegistry.getInstrumentation()
+            .context.assets.open("chinese.png").use { it.readBytes() }
+        repeat(42) { i ->
+            val uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, ContentValues().apply {
+                put(MediaStore.Images.Media.DISPLAY_NAME, "scroll-test-${System.currentTimeMillis()}-$i.png")
+                put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/MemeTest")
+                put(MediaStore.Images.Media.IS_PENDING, 1)
+            })!!
+            uris.add(uri)
+            resolver.openOutputStream(uri)!!.use { it.write(picture) }
+            resolver.update(uri, ContentValues().apply { put(MediaStore.Images.Media.IS_PENDING, 0) }, null, null)
+        }
+        app.control.resume()
+        compose.waitUntil(120_000) {
+            runBlocking { app.database.photos().observeStats().first().total >= 42 }
+        }
+        compose.waitUntil(15_000) { compose.onAllNodes(hasScrollToIndexAction()).fetchSemanticsNodes().isNotEmpty() }
+        compose.onNode(hasScrollToIndexAction()).performScrollToIndex(24)
+        val visible = compose.onAllNodes(SemanticsMatcher("photo tag") {
+            it.config.getOrNull(SemanticsProperties.TestTag)?.startsWith("photo:") == true
+        }).fetchSemanticsNodes()
+        val selectedTag = visible[visible.size / 2].config[SemanticsProperties.TestTag]
+        compose.onNodeWithTag(selectedTag).performClick()
+        compose.onNodeWithText("图片预览").assertIsDisplayed()
+        compose.onNodeWithText("返回").performClick()
+        compose.onNodeWithTag(selectedTag).assertIsDisplayed()
     }
     @Test fun searchGridPreviewAndReturnUseActualOcr() {
         val app = compose.activity.application as MemeApplication
