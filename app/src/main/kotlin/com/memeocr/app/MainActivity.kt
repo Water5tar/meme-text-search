@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.AndroidViewModel
@@ -123,6 +124,8 @@ private fun MemeScreen(model: PhotoViewModel, grant: () -> Unit, share: (PhotoEn
     val works by model.works.collectAsStateWithLifecycle()
     val paused by model.paused.collectAsStateWithLifecycle()
     val photos = model.photos.collectAsLazyPagingItems()
+    // Keep the grid state in the screen scope: preview temporarily removes the grid from composition.
+    val gridState = rememberLazyGridState()
     var preview by remember { mutableStateOf<PhotoEntity?>(null) }
     LaunchedEffect(access) { if (access == AccessLevel.NONE) preview = null }
     BackHandler(preview != null) { preview = null }
@@ -198,13 +201,14 @@ private fun MemeScreen(model: PhotoViewModel, grant: () -> Unit, share: (PhotoEn
                 if (photos.itemCount == 0) Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text(if (query.isBlank()) "相册中暂无可访问图片" else "没有匹配的图片\n只匹配已识别的图片文字",
                         style = MaterialTheme.typography.bodyMedium)
-                } else LazyVerticalGrid(GridCells.Fixed(columns), Modifier.fillMaxSize(),
+                } else LazyVerticalGrid(GridCells.Fixed(columns), Modifier.fillMaxSize(), state = gridState,
                     horizontalArrangement = Arrangement.spacedBy(3.dp), verticalArrangement = Arrangement.spacedBy(3.dp)) {
                     items(photos.itemCount) { index -> photos[index]?.let { photo ->
                         AsyncImage(ImageRequest.Builder(context).data(photo.contentUri).size(360)
                             .memoryCacheKey("${photo.contentUri}:${photo.dateModified}:${photo.mediaGeneration}")
                             .diskCachePolicy(CachePolicy.DISABLED).build(), "表情包",
                             Modifier.aspectRatio(1f).background(MaterialTheme.colorScheme.surfaceVariant)
+                                .testTag("photo:${photo.contentUri}")
                                 .clickable { preview = photo }, contentScale = ContentScale.Crop)
                     } }
                 }
