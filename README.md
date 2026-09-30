@@ -2,9 +2,9 @@
 
 基于 [rb-tyz/wheres-my-meme](https://github.com/rb-tyz/wheres-my-meme) 的 MIT 开源改进版。感谢原作者提供基础实现；保留原版权声明与许可证。
 
-这是一个分享给朋友使用的小工具，目前作为 MVP / 预览版提供。自动化发布验证使用 Android 14 模拟器；用户已在 Redmi Note 14 Pro+ 上试用并反馈未发现问题。其他机型与系统版本仍待验证。
+这是一个分享给朋友使用的小工具，目前作为 MVP / 预览版提供。Android 1.1.0 曾由用户在 Redmi Note 14 Pro+ 上试用并反馈未发现问题；1.2.0 的自动化验证使用 Android 14 模拟器，尚未在该手机上复测。其他机型与系统版本仍待验证。
 
-[下载 APK / Releases](https://github.com/Water5tar/meme-text-search/releases) · [测试报告](TEST-REPORT.md) · [与上游的区别](FORK.md) · [版本记录](CHANGELOG.md)
+[下载 APK / Releases](https://github.com/Water5tar/meme-text-search/releases) · [1.2.0 测试报告](TEST-REPORT-v1.2.0.md) · [与上游的区别](FORK.md) · [版本记录](CHANGELOG.md)
 
 **Your photos never leave your device.**
 
@@ -21,7 +21,7 @@
 
 ## 界面
 
-以下是本版签名 release APK 的模拟器截图，使用合成测试图片：
+以下是 Android 1.1.0 签名 release APK 的模拟器截图，使用合成测试图片：
 
 <p>
   <img src="docs/screenshots/search.png" alt="文字搜索结果" width="230" />
@@ -31,12 +31,16 @@
 
 ## 安装与使用
 
-1. 从本仓库 [Releases](https://github.com/Water5tar/meme-text-search/releases) 下载 `MemeSearch-1.1.0.apk`，复制到手机并允许文件管理器安装此 APK。最低 Android 8.0（API 26）。GitHub 页面自动提供的 Source code ZIP 是源码，不能直接安装。
+1. 从本仓库 [Releases](https://github.com/Water5tar/meme-text-search/releases) 下载最新的 `MemeSearch-*.apk`，复制到手机并允许文件管理器安装此 APK。最低 Android 8.0（API 26）。GitHub 页面自动提供的 Source code ZIP 是源码，不能直接安装。
 2. 打开“Meme 文字搜索”，授权读取照片。Android 14 及以后可以选择全部照片或部分照片。
 3. 授权后自动索引。首页显示已识别数量、总数量和后台任务状态；已识别的图片可以立即搜索。
 4. 在 `Search memes...` 输入图片中的文字，例如“笑死”。英文不区分大小写；全角 ASCII、中文字符间空白、换行会规范化。
 5. 点图片查看预览，点“分享”调用系统分享面板。
-6. 可以暂停、继续或重试失败图片。重新打开 App 时会同步新增、修改和删除的图片，已完成且未变化的图片不会再次 OCR。
+6. 可以暂停、继续或重试失败图片。重新打开 App 时会同步新增、修改和删除的图片，已完成且未变化的图片通常不会再次 OCR。升级到 1.2.0 时，为建立竖排搜索索引，会对已识别图片重新 OCR 一次；期间旧搜索文字仍可使用。
+
+## iPhone 版状态
+
+[iPhone 版源码与构建说明](ios/README.md)已经提供：原生 SwiftUI + PhotoKit + 系统 Vision + 本机 SQLite。它仍是源码预览，没有可供朋友直接安装的 IPA 或 TestFlight 版本，也尚未在 iPhone 真机上验证。仓库的 macOS 自动化构建检查模拟器编译与排版逻辑；获得签名与分发条件后还需完成真机测试。
 
 空搜索词显示获准访问的相册图片；输入文字后只匹配成功识别的 OCR 文字。搜索使用字面包含关系：`%`、`_`、标点都当作普通字符，不匹配文件名、分类或含义相近的词。OCR 本身可能误识别、漏字；这会影响搜索命中。
 

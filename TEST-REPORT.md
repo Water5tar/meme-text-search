@@ -1,6 +1,6 @@
-# 本地 Meme 搜索 · 本次验证结果
+# Android 1.1.0 历史验证记录
 
-验证日期：2026-09-28。上游基线：`rb-tyz/wheres-my-meme`，MIT，提交 `168a6630d65f4a5a0d9fc03a7bab7d4aef85b6b5`。这是本地修改版，尚未发布 GitHub fork。
+验证日期：2026-09-28。上游基线：`rb-tyz/wheres-my-meme`，MIT，提交 `168a6630d65f4a5a0d9fc03a7bab7d4aef85b6b5`。本文是当时的发布前记录；最新版本请见 [1.2.0 测试报告](TEST-REPORT-v1.2.0.md)。
 
 ## 交付构建
 
