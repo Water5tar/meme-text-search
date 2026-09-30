@@ -19,6 +19,13 @@ final class TextLayoutTests: XCTestCase {
     }
 
     func testChineseSpacesAndFullWidthNormalize() {
-        XCTAssertEqual(TextLayout.normalize("ＡＢＣ 你\n好"), "abc你好")
+        XCTAssertEqual(TextLayout.normalize("ＡＢＣ 你\n好"), "abc 你好")
+    }
+
+    func testWholeVerticalLinesReadRightToLeft() {
+        let lines = [OCRGlyph(text: "你我他", rect: CGRect(x: 0.1, y: 0.3, width: 0.1, height: 0.5)),
+                     OCRGlyph(text: "天地人", rect: CGRect(x: 0.6, y: 0.25, width: 0.1, height: 0.6))]
+        XCTAssertEqual(TextLayout.verticalLineOrder(lines), "天地人\n你我他")
+        XCTAssertTrue(TextLayout.withReadingOrder("你我他\n天地人", glyphs: lines).hasPrefix("天地人\n你我他"))
     }
 }
