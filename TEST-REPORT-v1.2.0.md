@@ -15,7 +15,7 @@
 
 ## iPhone 源码
 
-`ios/` 包含 SwiftUI、PhotoKit、Vision、SQLite 原生实现，以及 macOS GitHub Actions 的无签名模拟器构建与排版测试。此版没有真机或用户相册的验证，也没有可安装的签名 iPhone 包。构建与测试状态以 [GitHub Actions](https://github.com/Water5tar/meme-text-search/actions/workflows/ios-build.yml) 最新一次运行结果为准。
+`ios/` 包含 SwiftUI、PhotoKit、Vision、SQLite 原生实现，以及 macOS GitHub Actions 的无签名模拟器构建与排版测试。[测试分支的成功运行](https://github.com/Water5tar/meme-text-search/actions/runs/36673461951)完成了模拟器构建与文字排版单元测试。此版没有真机或用户相册的验证，也没有可安装的签名 iPhone 包。
 
 ## 识别边界
 

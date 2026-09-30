@@ -111,7 +111,7 @@ Linux / macOS 在设置 JDK 和 SDK 后可运行 `bash scripts/build-apk.sh`；�
 
 基于 MIT 项目 [rb-tyz/wheres-my-meme](https://github.com/rb-tyz/wheres-my-meme)，固定提交 `168a6630d65f4a5a0d9fc03a7bab7d4aef85b6b5`；保留 MIT License，改动说明见 FORK.md。新包名 `com.memeocr.local`，可与上游版本共存，索引不从上游版本迁移。
 
-本次结果和验证边界见 TEST-REPORT.md。模拟器结果不代表真实手机或不同照片内容的耗时。Android 8–13 与 Android 15+ 的真机、不同厂商的后台省电策略仍需在目标手机验证。
+本次结果和验证边界见 [1.2.0 测试报告](TEST-REPORT-v1.2.0.md)。模拟器结果不代表真实手机或不同照片内容的耗时。Android 8–13 与 Android 15+ 的真机、不同厂商的后台省电策略仍需在目标手机验证。
 
 ## 反馈与参与
 
