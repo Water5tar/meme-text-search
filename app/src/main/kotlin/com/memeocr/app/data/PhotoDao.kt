@@ -8,12 +8,12 @@ import kotlinx.coroutines.flow.Flow
 abstract class PhotoDao {
     // instr is literal: % and _ supplied by the user are never SQL wildcards.
     @Query("""SELECT * FROM photos WHERE accessible = 1
-        AND (:query = '' OR (ocrStatus = 'indexed' AND instr(normalizedText, :query) > 0))
+        AND (:query = '' OR ((ocrStatus = 'indexed' OR (ocrStatus = 'pending' AND indexedAt > 0)) AND instr(normalizedText, :query) > 0))
         ORDER BY dateAdded DESC, mediaStoreId DESC, contentUri DESC""")
     abstract fun search(query: String): PagingSource<Int, PhotoEntity>
 
     @Query("""SELECT COUNT(*) FROM photos WHERE accessible = 1 AND
-        (:query = '' OR (ocrStatus = 'indexed' AND instr(normalizedText, :query) > 0))""")
+        (:query = '' OR ((ocrStatus = 'indexed' OR (ocrStatus = 'pending' AND indexedAt > 0)) AND instr(normalizedText, :query) > 0))""")
     abstract fun observeResultCount(query: String): Flow<Int>
 
     @Query("""SELECT COUNT(*) AS total,

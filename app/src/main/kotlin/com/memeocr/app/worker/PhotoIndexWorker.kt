@@ -59,7 +59,7 @@ class PhotoIndexWorker(context: Context, params: WorkerParameters) : CoroutineWo
                         bitmap = ImageLoader.decodeForOcr { app.contentResolver.openInputStream(uri) }
                             ?: error("无法解码图片")
                         val image = InputImage.fromBitmap(bitmap!!, 0)
-                        val zh = chinese.process(image).await().text
+                        val zh = OcrLayout.text(chinese.process(image).await())
                         val en = latin.process(image).await().text
                         val text = listOf(zh, en).filter { it.isNotBlank() }.distinct().joinToString("\n")
                         if (sameMediaVersion(row)) {

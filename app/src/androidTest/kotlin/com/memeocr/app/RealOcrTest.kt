@@ -13,6 +13,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import com.memeocr.app.data.OcrStatus
 import com.memeocr.app.media.ImageLoader
+import com.memeocr.app.worker.OcrLayout
 import com.memeocr.core.TextNormalizer
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
@@ -27,6 +28,25 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class RealOcrTest {
     @get:Rule val permission = GrantPermissionRule.grant(Manifest.permission.READ_MEDIA_IMAGES)
+    @Test fun verticalChineseUsesGeometricReadingOrder(): Unit = runBlocking {
+        val recognizer = TextRecognition.getClient(ChineseTextRecognizerOptions.Builder().build())
+        val bitmap = Bitmap.createBitmap(900, 700, Bitmap.Config.ARGB_8888)
+        Canvas(bitmap).apply {
+            drawColor(Color.WHITE)
+            val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = Color.BLACK; textSize = 100f }
+            "天地人".forEachIndexed { index, ch -> drawText(ch.toString(), 510f, 160f + index * 130f, paint) }
+            "你我他".forEachIndexed { index, ch -> drawText(ch.toString(), 180f, 160f + index * 130f, paint) }
+        }
+        try {
+            val result = recognizer.process(InputImage.fromBitmap(bitmap, 0)).await()
+            val ordered = OcrLayout.text(result)
+            Log.i("MemeOcr", "vertical_raw=${result.text}; vertical_ordered=$ordered")
+            for (block in result.textBlocks) for (line in block.lines) {
+                Log.i("MemeOcr", "line=${line.text} box=${line.boundingBox} elements=${line.elements.map { "${it.text}:${it.boundingBox}:symbols=${it.symbols.size}" }}")
+            }
+            assertTrue("Wrong column order in: $ordered", ordered.startsWith("天地人\n你我他"))
+        } finally { recognizer.close(); bitmap.recycle() }
+    }
     @Test fun bundledModelsRecognizeChineseAndEnglishOffline(): Unit = runBlocking {
         val test = InstrumentationRegistry.getInstrumentation().context
         val zh = TextRecognition.getClient(ChineseTextRecognizerOptions.Builder().build())
